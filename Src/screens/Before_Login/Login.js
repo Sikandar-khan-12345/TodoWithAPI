@@ -1,5 +1,5 @@
-import {StyleSheet, Text, View, Button, Image, Linking} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {StyleSheet,View,Image, Linking} from 'react-native';
+import React, {useState} from 'react';
 import Input from '../../components/UI/Input';
 import UiButton from '../../components/UI/UiButton';
 import {isValidForm, validators} from '../../constents/Validation';
@@ -8,7 +8,6 @@ import Paragraph from '../../components/UI/Paragraph';
 import Colors from '../../constents/Colors';
 import Clickable from '../../components/HOC/Clickble';
 import {IconPath, ImagePath} from '../../Assets';
-import {useIsFocused} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({navigation}) => {

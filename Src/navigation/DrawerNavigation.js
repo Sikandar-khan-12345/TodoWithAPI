@@ -11,11 +11,8 @@ const Drawer = createDrawerNavigator();
 
 const DrawerNavigation = () => {
   return (
-    <Drawer.Navigator
-    drawerContent={props => <CustomSidebarMenu {...props}/>}
-    >
+    <Drawer.Navigator drawerContent={props => <CustomSidebarMenu {...props} />}>
       <Drawer.Screen name="Dashboard" component={Dashboard} />
-
       <Drawer.Screen name="Students" component={StudentsList} />
       <Drawer.Screen name="Employees" component={EmployesList} />
       <Drawer.Screen name="Products" component={ProductsList} />

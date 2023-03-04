@@ -24,7 +24,6 @@ export const IconPath = {
   delete: require('./icons/delete.png'),
   edit: require('./icons/edit.png'),
   show: require('./icons/show.png'),
-
 };
 export const ImagePath = {
   delivery0: require('./images/deliveryman0.png'),
@@ -35,9 +34,11 @@ export const ImagePath = {
   image: require('./images/image.png'),
   image2: require('./images/image2.png'),
   Students: require('./images/students.jpg'),
+  Student1: require('./images/Students1.jpg'),
   Employees: require('./images/Employees.jpg'),
+  Employees1: require('./images/Employees1.jpg'),
   loginimg: require('./images/loginimg.png'),
   signupimg: require('./images/signupimg.png'),
   products: require('./images/products.jpg'),
-
+  products1: require('./images/Products1.jpg'),
 };

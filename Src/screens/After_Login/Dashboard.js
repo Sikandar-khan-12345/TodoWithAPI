@@ -6,47 +6,90 @@ import Paragraph from '../../components/UI/Paragraph';
 import Colors from '../../constents/Colors';
 import Clickable from '../../components/HOC/Clickble';
 import ScrollContainer from '../../components/HOC/ScrollContainer';
+import Swiper from 'react-native-swiper';
 
 const Dashboard = ({navigation}) => {
   return (
     <ScrollContainer>
       <ViewContainer style={styles.MainContainer}>
-        <Clickable
-          style={styles.Container1}
-          onPress={() => navigation.navigate('Students')}>
-          <Image
-            source={ImagePath.Students}
-            style={styles.Img1}
-            resizeMode="contain"
-          />
-          <Paragraph color={Colors.white} top={7} size={20}>
-            STUDENTS DETAILS
-          </Paragraph>
-        </Clickable>
-        <Clickable
-          style={styles.Container1}
-          onPress={() => navigation.navigate('Employees')}>
-          <Image
-            source={ImagePath.Employees}
-            style={styles.Img2}
-            resizeMode="contain"
-          />
-          <Paragraph color={Colors.white} top={7} size={20}>
-            EMPLOYEES DETAILS
-          </Paragraph>
-        </Clickable>
-        <Clickable
-          style={styles.Container1}
-          onPress={() => navigation.navigate('Products')}>
-          <Image
-            source={ImagePath.products}
-            style={styles.Img2}
-            resizeMode="contain"
-          />
-          <Paragraph color={Colors.white} top={7} size={20}>
-            PRODUCTS DETAILS
-          </Paragraph>
-        </Clickable>
+        <View style={{height: 220}}>
+          <Swiper style={styles.wrapper} showsButtons={false} autoplay={true}>
+            <Image
+              source={ImagePath.Student1}
+              style={{height: '100%', width: '100%'}}
+            />
+            <Image
+              source={ImagePath.Employees1}
+              style={{height: '100%', width: '100%'}}
+            />
+            <Image
+              source={ImagePath.products1}
+              style={{height: '100%', width: '100%'}}
+            />
+          </Swiper>
+        </View>
+        <View>
+          <Clickable
+            style={styles.Container1}
+            onPress={() => navigation.navigate('Students')}>
+            <View style={styles.imgContainer}>
+              <Image
+                source={ImagePath.Students}
+                style={styles.Img1}
+                resizeMode="contain"
+              />
+            </View>
+            <View style={styles.txtcontainer}>
+              <Paragraph
+                color={Colors.black}
+                top={7}
+                size={17}
+                style={styles.txt}>
+                STUDENTS DETAILS
+              </Paragraph>
+            </View>
+          </Clickable>
+          <Clickable
+            style={styles.Container1}
+            onPress={() => navigation.navigate('Employees')}>
+            <View style={styles.imgContainer}>
+              <Image
+                source={ImagePath.Employees}
+                style={styles.Img1}
+                resizeMode="contain"
+              />
+            </View>
+            <View style={styles.txtcontainer}>
+              <Paragraph
+                color={Colors.black}
+                top={7}
+                size={17}
+                style={styles.txt}>
+                EMPLOYESS DETAILS 
+              </Paragraph>
+            </View>
+          </Clickable>
+          <Clickable
+            style={styles.Container1}
+            onPress={() => navigation.navigate('Products')}>
+            <View style={styles.imgContainer}>
+              <Image
+                source={ImagePath.products}
+                style={styles.Img1}
+                resizeMode="contain"
+              />
+            </View>
+            <View style={styles.txtcontainer}>
+              <Paragraph
+                color={Colors.black}
+                top={7}
+                size={17}
+                style={styles.txt}>
+                PRODUCTS DETAILS
+              </Paragraph>
+            </View>
+          </Clickable>
+        </View>
       </ViewContainer>
     </ScrollContainer>
   );
@@ -57,30 +100,48 @@ export default Dashboard;
 const styles = StyleSheet.create({
   MainContainer: {
     flex: 1,
-    padding: 5,
-    backgroundColor: Colors.smokWhite,
+    // padding: 5,
+    backgroundColor: Colors.white,
   },
   Container1: {
     // borderWidth: 1,
     borderColor: 'red',
     margin: 10,
     alignItems: 'center',
-    height: 200,
+    height: 120,
     borderRadius: 20,
-    backgroundColor: Colors.cofi,
+    backgroundColor: Colors.smokWhite,
     elevation: 10,
+    width: '90%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignSelf: 'center',
   },
 
   Img1: {
     width: '100%',
-    height: '80%',
+    height: '100%',
     borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderBottomLeftRadius: 20,
+    // borderRadius:20
   },
   Img2: {
     width: '100%',
     height: '80%',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+  },
+  txt: {
+    transform: [{rotate: '-10deg'}],
+    paddingTop: 20,
+    fontWeight: 'bold',
+  },
+  txtcontainer: {
+    width: 130,
+    height: 120,
+  },
+  imgContainer: {
+    width: 150,
+    height: 120,
   },
 });

@@ -9,6 +9,7 @@ import DrawerNavigation from './DrawerNavigation';
 import StudentsAddList from '../screens/After_Login/Students/StudentsAddList';
 import StudentsList from '../screens/After_Login/Students/StudentsList';
 import EmployesList from '../screens/After_Login/employes/EmployesList';
+import EmployesAddList from '../screens/After_Login/employes/EmployesAddList';
 const Stack = createNativeStackNavigator();
 
 const Routs = () => {
@@ -51,10 +52,15 @@ const Routs = () => {
           component={StudentsList}
           options={{headerShown: false}}
         />
-    
+
         <Stack.Screen
           name="Employees"
           component={EmployesList}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="EmployesAddList"
+          component={EmployesAddList}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

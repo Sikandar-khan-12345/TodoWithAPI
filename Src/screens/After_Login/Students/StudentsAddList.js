@@ -1,5 +1,5 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
-import React, {useState} from 'react';
+import {StyleSheet, View, Image} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import FormContainer from '../../../components/HOC/FormContainer';
 import Input from '../../../components/UI/Input';
 import UiButton from '../../../components/UI/UiButton';
@@ -8,6 +8,8 @@ import Paragraph from '../../../components/UI/Paragraph';
 import Clickable from '../../../components/HOC/Clickble';
 import Colors from '../../../constents/Colors';
 import {validators, isValidForm} from '../../../constents/Validation';
+import Dropdown from '../../../components/UI/Dropdown';
+import {useIsFocused} from '@react-navigation/native';
 
 const StudentsAddList = ({navigation}) => {
   const [name, setname] = useState('');
@@ -19,8 +21,76 @@ const StudentsAddList = ({navigation}) => {
   const [country, setcountry] = useState('');
   const [scholl, setscholl] = useState('');
   const [error, seterror] = useState({});
+  const [loader, setloader] = useState(false);
+  const [SubjectData, setSubjectData] = useState([]);
+  const [CourseData, setCourseData] = useState([]);
+  const [CountryData, setCountryData] = useState([]);
+  const [CountrySchool, setCountrySchool] = useState([]);
+
+  useEffect(() => {
+    GetCoures();
+    GetCountry();
+  }, [useIsFocused()]);
+
+  const GetCoures = async () => {
+    try {
+      let results = await fetch(
+        'https://light-pumps-seal.cyclic.app/DreamCoder/api/Course',
+      );
+
+      let res = await results.json();
+      resData = await res;
+
+      let Data = resData.message;
+
+      let arr = [];
+
+      Data.map((item, index) => {
+        let obj = {
+          label: item.CourseName,
+          value: item.CourseName + '*' + item._id,
+          color: 'black',
+        };
+        arr.push(obj);
+      });
+      setCourseData(arr);
+      console.log('============arr=========>', arr);
+    } catch (err) {
+      alert(err);
+      // console.log("============>",err);
+    }
+  };
+  const GetCountry = async () => {
+   try{
+    let results = await fetch(
+      'https://light-pumps-seal.cyclic.app/DreamCoder/api/Country',
+    );
+    let res = await results.json();
+    let resData = await res;
+    // console.log('==course  ==== resData==>', resData);
+    Data = resData.message;
+
+    let arr = [];
+
+    Data.map((item, index) => {
+      let obj = {
+        label: item.CountryCode + ' ' + item.CountryName,
+        value: item.CountryCode + '*' + item._id,
+        color: 'black',
+      };
+      arr.push(obj);
+    });
+    setCountryData(arr);
+   }
+   catch(err){
+    console.log('==============>',err);
+    alert(err)
+   }
+  };
 
   const AddWithValidationData = async () => {
+    setloader(true);
+
     const form = {
       Name: validators.checkRequire('Students Name', name),
       Email: validators.checkEmail('Students Email', email),
@@ -36,7 +106,7 @@ const StudentsAddList = ({navigation}) => {
       let body = {
         name: name,
         email: email,
-        coursse: course,
+        course: course,
         subject: subject,
         number: number,
         gender: gender,
@@ -57,6 +127,7 @@ const StudentsAddList = ({navigation}) => {
 
         let res = await results.json();
         let resdata = await res;
+        setloader(false);
         if (resdata.status == true) {
           navigation.navigate('StudentsList');
         } else {
@@ -67,6 +138,84 @@ const StudentsAddList = ({navigation}) => {
       } catch (err) {
         alert(err);
       }
+    }
+  };
+
+  const CourseFunction = async idName => {
+    if (!idName) {
+      idName = 'Basic Course*6402309fd1e8ae3f6acd8a88';
+    } else {
+      idName = idName;
+    }
+    let NewData = idName.split('*');
+    console.log('=====>>NewData', NewData);
+    setcourse(NewData[0]);
+
+    try {
+      let results = await fetch(
+        `https://light-pumps-seal.cyclic.app/DreamCoder/api/Course/${NewData[1]}`,
+      );
+      let res = await results.json();
+      let resData = await res;
+      console.log('====resdata==>', resData);
+
+      let Data = resData.Subjects;
+
+      let arr = [];
+
+      Data.map((item, index) => {
+        let obj = {
+          label: item,
+          value: item,
+          color: 'black',
+        };
+        arr.push(obj);
+      });
+      setSubjectData(arr);
+      // console.log('===========>',arr);
+    } catch (err) {
+      // alert(err);
+      console.log('====catch=====>', err);
+    }
+    // console.log('=========>',NewData);
+  };
+
+  const CountryFunction = async (i) => {
+    if (!i) {
+      // i = 'Basic Course*6402309fd1e8ae3f6acd8a88';
+
+      i = '+91 INDIA*6402286daf37e295673020e2';
+    } else {
+      i = i;
+    }
+    let Newdata = i.split('*');
+    setcountry(Newdata[0]);
+
+    // console.log('========>',Newdata);
+
+    try {
+      let results = await fetch(
+        `https://light-pumps-seal.cyclic.app/DreamCoder/api/Country/${Newdata[1]}`,
+      );
+      let res = await results.json();
+      let resData = await res;
+
+      let Data = resData.SchoolNames;
+
+      let arr = [];
+
+      Data.map((item, index) => {
+        let obj = {
+          label: item,
+          value: item,
+          color: 'black',
+        };
+        arr.push(obj);
+      });
+      setCountrySchool(arr);
+    } catch (err) {
+      console.log('==========>', err);
+      alert(err);
     }
   };
   return (
@@ -100,19 +249,34 @@ const StudentsAddList = ({navigation}) => {
           onChange={setemail}
           error={error?.Email}
         />
-        <Input
-          label=""
-          placeholder={'Students Course...'}
-          style={styles.inp}
-          onChange={setcourse}
-          error={error?.Course}
-        />
-        <Input
-          placeholder={'Students Subject...'}
-          style={styles.inp}
-          onChange={setsubject}
-          error={error?.Subject}
-        />
+        <View
+          style={{
+            borderWidth: 1,
+            borderColor: Colors.purple,
+            marginVertical: 10,
+            padding: 0,
+            borderRadius: 10,
+          }}>
+          <Dropdown
+            item={CourseData}
+            placeholder={'Students Course...'}
+            onChange={e => CourseFunction(e)}
+          />
+        </View>
+        <View
+          style={{
+            borderWidth: 1,
+            borderColor: Colors.purple,
+            marginVertical: 10,
+            padding: 0,
+            borderRadius: 10,
+          }}>
+          <Dropdown
+            item={SubjectData}
+            placeholder={'Student Subject'}
+            onChange={e => setsubject(e)}
+          />
+        </View>
         <Input
           label=""
           placeholder={'Number...'}
@@ -121,30 +285,56 @@ const StudentsAddList = ({navigation}) => {
           onChange={setnumber}
           error={error?.Number}
         />
-        <Input
-          label=""
-          placeholder={'Gender'}
-          style={styles.inp}
-          onChange={setgender}
-          error={error?.Gender}
-        />
-        <Input
-          label=""
-          placeholder={'Country'}
-          style={styles.inp}
-          onChange={setcountry}
-          error={error?.Country}
-        />
-        <Input
-          label=""
-          placeholder={'Students Scholl'}
-          style={styles.inp}
-          onChange={setscholl}
-        />
+
+        <View
+          style={{
+            borderWidth: 1,
+            borderColor: Colors.purple,
+            marginVertical: 10,
+            borderRadius: 10,
+          }}>
+          <Dropdown
+            item={[
+              {label: 'Male', value: 'Male', color: Colors.black},
+              {label: 'Femal', value: 'Femal', color: Colors.black},
+            ]}
+            placeholder={'Gender'}
+            onChange={e => setgender(e)}
+          />
+        </View>
+
+        <View
+          style={{
+            borderWidth: 1,
+            borderColor: Colors.purple,
+            marginVertical: 10,
+            borderRadius: 10,
+          }}>
+          <Dropdown
+            item={CountryData}
+            placeholder={'Country'}
+            onChange={e => CountryFunction(e)}
+          />
+        </View>
+        <View
+          style={{
+            borderWidth: 1,
+            borderColor: Colors.purple,
+            marginVertical: 10,
+            borderRadius: 10,
+          }}>
+          <Dropdown
+            item={CountrySchool}
+            placeholder={'Students School'}
+            onChange={e => setscholl(e)}
+          />
+        </View>
+
         <UiButton
           text="Add"
           onPress={() => AddWithValidationData()}
           style={styles.inp}
+          loading={loader}
         />
       </View>
     </FormContainer>
@@ -176,5 +366,7 @@ const styles = StyleSheet.create({
   inp: {
     borderWidth: 1,
     borderRadius: 10,
+    height: 53,
+    paddingLeft: 16,
   },
 });

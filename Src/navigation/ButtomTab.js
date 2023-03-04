@@ -4,6 +4,7 @@ import {Image} from 'react-native';
 import {IconPath} from '../Assets';
 import Login from '../screens/Before_Login/Login';
 import DrawerNavigation from './DrawerNavigation';
+import Colors from '../constents/Colors';
 const Tab = createBottomTabNavigator();
 
 const ButtomTab = () => {
@@ -21,26 +22,7 @@ const ButtomTab = () => {
         name="Login"
         component={Login}
         options={{
-          tabBarLabel: 'Login',
-          headerShown: false,
-          tabBarIcon: ({focused}) => (
-            <Image
-              source={IconPath.home}
-              style={{
-                width: 30,
-                height: 30,
-                tintColor: focused ? 'red' : '#000',
-              }}
-            />
-          ),
-        }}
-      />
-      
-      {/* <Tab.Screen
-        name="DrawerNavigation"
-        component={DrawerNavigation}
-        options={{
-          tabBarLabel: 'DrawerNavigation',
+          tabBarLabel: 'LOGIN',
           headerShown: false,
           tabBarIcon: ({focused}) => (
             <Image
@@ -48,13 +30,32 @@ const ButtomTab = () => {
               style={{
                 width: 30,
                 height: 30,
-                tintColor: focused ? 'red' : '#000',
+                tintColor: focused ? Colors.purple : Colors.black,
               }}
             />
           ),
-          tabBarBadge: 3,
         }}
-      /> */}
+      />
+
+      <Tab.Screen
+        name="DrawerNavigation"
+        component={DrawerNavigation}
+        options={{
+          tabBarLabel: 'HOME',
+          headerShown: false,
+          tabBarIcon: ({focused}) => (
+            <Image
+              source={IconPath.home}
+              style={{
+                width: 30,
+                height: 30,
+                tintColor: focused ? Colors.purple : Colors.black,
+              }}
+            />
+          ),
+          // tabBarBadge: 3,
+        }}
+      />
     </Tab.Navigator>
   );
 };
