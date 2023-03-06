@@ -17,7 +17,7 @@ const DrawerNavigation = () => {
       <Drawer.Screen name="Employees" component={EmployesList} />
       <Drawer.Screen name="Products" component={ProductsList} />
       <Drawer.Screen name="Setting" component={Setting} />
-      <Drawer.Screen name="LogOut" component={Login} />
+      {/* <Drawer.Screen name="LogOut" component={Login} /> */}
     </Drawer.Navigator>
   );
 };

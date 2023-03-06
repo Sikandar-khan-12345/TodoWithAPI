@@ -21,6 +21,7 @@ const Routs = () => {
           component={ButtomTab}
           options={{headerShown: false}}
         />
+      
         <Stack.Screen
           name="DrawerNavigation"
           component={DrawerNavigation}

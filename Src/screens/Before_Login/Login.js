@@ -1,4 +1,4 @@
-import {StyleSheet,View,Image, Linking} from 'react-native';
+import {StyleSheet, View, Image, Linking} from 'react-native';
 import React, {useState} from 'react';
 import Input from '../../components/UI/Input';
 import UiButton from '../../components/UI/UiButton';
@@ -14,7 +14,8 @@ const Login = ({navigation}) => {
   const [email, setemail] = useState('');
   const [password, setpassword] = useState('');
   const [error, seterror] = useState({});
-  const [loder, setloder] = useState(false)
+  const [loder, setloder] = useState(false);
+  const [Eye, setEye] = useState(IconPath.offEye);
 
   // useEffect(() => {
   //   checkToken();
@@ -29,7 +30,7 @@ const Login = ({navigation}) => {
   // };
 
   const LoginWith = async () => {
-    setloder(true)
+    setloder(true);
     const form = {
       Email: validators.checkEmail('Email', email),
       Password: validators.checkPassword('Password', password),
@@ -54,7 +55,7 @@ const Login = ({navigation}) => {
 
         let res = await results.json();
         let resData = await res;
-        setloder(false)
+        setloder(false);
 
         console.log(resData);
 
@@ -70,6 +71,11 @@ const Login = ({navigation}) => {
     }
   };
 
+  const EyeChenge = () => {
+    let Icon = Eye == IconPath.offEye ? IconPath.onEye : IconPath.offEye;
+
+    setEye(Icon);
+  };
   return (
     <FormContainer style={{padding: 10}}>
       <View
@@ -100,24 +106,30 @@ const Login = ({navigation}) => {
           placeholder={'Email'}
           error={error?.Email}
           onChange={setemail}
-          style={{paddingLeft: 20}}
+          style={{paddingLeft: 20, width: '98%'}}
         />
         <View style={{width: 20, position: 'relative', bottom: 40}}>
           <Image source={IconPath.email} style={{width: 15, height: 15}} />
         </View>
-        <Input
-          label=""
-          placeholder={'Password'}
-          error={error?.Password}
-          onChange={setpassword}
-          style={{paddingLeft: 20}}
-        />
-        <Image
-          source={IconPath.lock}
-          style={{position: 'relative', bottom: 40, width: 15, height: 15}}
-        />
+        <View>
+          <Input
+            label=""
+            placeholder={'Password'}
+            error={error?.Password}
+            onChange={setpassword}
+            secureTextEntry = {Eye == IconPath.offEye ? true:false}
+            style={{paddingLeft: 20, width: '89%'}}
+          />
+          <Image
+            source={IconPath.lock}
+            style={{position: 'relative', bottom: 40, width: 15, height: 15}}
+          />
+        </View>
+        <Clickable style={styles.EyeClick} onPress={() => EyeChenge()}>
+          <Image source={Eye} style={styles.Eye} />
+        </Clickable>
 
-        <UiButton text="Login" onPress={() => LoginWith()} loading = {loder} />
+        <UiButton text="Login" onPress={() => LoginWith()} loading={loder} />
 
         <Paragraph
           textAlign="center"
@@ -186,5 +198,22 @@ const styles = StyleSheet.create({
   SocialIcon: {
     width: 28,
     height: 28,
+  },
+  Eye: {
+    width: 20,
+    height: 20,
+    top: 2,
+  },
+  EyeClick: {
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.purple,
+    width: '10%',
+    position: 'relative',
+    bottom: 65.5,
+    alignSelf: 'flex-end',
+    right: 10,
+    height: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
