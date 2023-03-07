@@ -10,6 +10,7 @@ import StudentsAddList from '../screens/After_Login/Students/StudentsAddList';
 import StudentsList from '../screens/After_Login/Students/StudentsList';
 import EmployesList from '../screens/After_Login/employes/EmployesList';
 import EmployesAddList from '../screens/After_Login/employes/EmployesAddList';
+import EmployesDetails from '../screens/After_Login/employes/EmployesDetails';
 const Stack = createNativeStackNavigator();
 
 const Routs = () => {
@@ -55,8 +56,13 @@ const Routs = () => {
         />
 
         <Stack.Screen
-          name="Employees"
+          name="EmployesList"
           component={EmployesList}
+          options={{headerShown: false}}
+        />
+         <Stack.Screen
+          name="EmployesDetails"
+          component={EmployesDetails}
           options={{headerShown: false}}
         />
         <Stack.Screen

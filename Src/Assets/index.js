@@ -17,6 +17,8 @@ export const IconPath = {
   gender: require('./icons/gender.png'),
   delete: require('./icons/delete.png'),
   edit: require('./icons/edit.png'),
+  back:require('./icons/back.png'),
+  share:require('./icons/share.png')
 };
 export const ImagePath = {
   Students: require('./images/students.jpg'),

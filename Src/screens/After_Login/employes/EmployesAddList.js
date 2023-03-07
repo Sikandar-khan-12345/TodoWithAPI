@@ -9,27 +9,63 @@ import {ImagePath} from '../../../Assets';
 import Clickable from '../../../components/HOC/Clickble';
 import Colors from '../../../constents/Colors';
 
-const EmployesAddList = () => {
+const EmployesAddList = ({navigation}) => {
   const [id, setid] = useState('');
   const [name, setname] = useState('');
   const [email, setemail] = useState('');
   const [address, setaddress] = useState('');
+  const [number, setnumber] = useState('');
   const [dob, setdob] = useState('');
   const [employment, setemployment] = useState('');
   const [error, seterror] = useState({});
 
-  const EmployesDataWithValidation = () => {
+  const EmployesDataWithValidation = async () => {
     const form = {
       ID: validators.checkRequire('ID', id),
       Name: validators.checkRequire('Employes Name', name),
       Email: validators.checkEmail('Employes Email', email),
+      Number: validators.checkPhoneNumber('Employe Number', number),
       Address: validators.checkRequire('Employes Address', address),
       Dob: validators.checkRequire('Employes Dob', dob),
       Employment: validators.checkRequire('Employmnt', employment),
     };
     seterror(form);
     if (isValidForm(form)) {
-      navigation.navigate('EmployesList');
+      let body = {
+        Employid: id,
+        Employname: name,
+        Employemail: email,
+        Employnumber: number,
+        Employaddress: address,
+        Employdob: dob,
+        Employment: employment,
+      };
+
+      let data = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(body),
+      };
+
+      try {
+        let results = await fetch(
+          'https://light-pumps-seal.cyclic.app/DreamCoder/api/Employe',
+          data,
+        );
+        let res = await results.json();
+        let resData = await res;
+
+        console.log('=======>',resData);
+
+        if (resData.status == true) {
+          navigation.navigate('EmployesList');
+        }
+        else{
+          alert('Not Found')
+        }
+      } catch (err) {
+        alert(err);
+      }
     }
   };
   return (
@@ -67,6 +103,13 @@ const EmployesAddList = () => {
           error={error?.Email}
           style={styles.inp}
         />
+        <Input
+          placeholder={'Employes Number'}
+          onChange={setnumber}
+          error={error?.Number}
+          style={styles.inp}
+        />
+
         <Input
           placeholder={'Employes Address'}
           onChange={setaddress}
