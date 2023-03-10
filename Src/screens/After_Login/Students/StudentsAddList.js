@@ -83,7 +83,7 @@ const StudentsAddList = ({navigation}) => {
     setCountryData(arr);
    }
    catch(err){
-    console.log('==============>',err);
+    // console.log('==============>',err);
     alert(err)
    }
   };
@@ -237,14 +237,14 @@ const StudentsAddList = ({navigation}) => {
       <View>
         <Input
           label=""
-          placeholder={'Students Name...'}
+          placeholder={'Students Name'}
           style={styles.inp}
           onChange={setname}
           error={error?.Name}
         />
         <Input
           label=""
-          placeholder={'Students Email...'}
+          placeholder={'Students Email'}
           style={styles.inp}
           onChange={setemail}
           error={error?.Email}
@@ -259,7 +259,7 @@ const StudentsAddList = ({navigation}) => {
           }}>
           <Dropdown
             item={CourseData}
-            placeholder={'Students Course...'}
+            placeholder={'Students Course'}
             onChange={e => CourseFunction(e)}
           />
         </View>
@@ -279,7 +279,7 @@ const StudentsAddList = ({navigation}) => {
         </View>
         <Input
           label=""
-          placeholder={'Number...'}
+          placeholder={'Number'}
           style={styles.inp}
           keyboardType="number-pad"
           onChange={setnumber}

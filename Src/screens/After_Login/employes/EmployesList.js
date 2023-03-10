@@ -1,4 +1,10 @@
-import {StyleSheet,View, Image, FlatList} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Image,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ViewContainer from '../../../components/HOC/ViewContainer';
 import Clickable from '../../../components/HOC/Clickble';
@@ -7,8 +13,7 @@ import Colors from '../../../constents/Colors';
 import {useIsFocused} from '@react-navigation/native';
 import Paragraph from '../../../components/UI/Paragraph';
 import Loader from '../../../components/UI/Loader';
-import {Swipeable} from 'react-native-gesture-handler';
-
+import SimpleToast from 'react-native-simple-toast';
 const EmployesList = ({navigation}) => {
   const [Data, setData] = useState([]);
   const [loaded, setloaded] = useState(true);
@@ -36,24 +41,57 @@ const EmployesList = ({navigation}) => {
     }
   };
 
-  const LeftSwipe = () => {
-    return (
-      <Clickable style={styles.leftswip}>
-        <Image source={IconPath.delete} style={{width: 20, height: 20}} />
-      </Clickable>
-    );
-  };
-  const RightSwipe = () => {
-    return (
-      <Clickable style={styles.leftswip}>
-        <Image source={IconPath.edit} style={{width: 20, height: 20}} />
-      </Clickable>
-    );
+  // const LeftSwipe = () => {
+  //   return (
+  //     <TouchableOpacity
+  //       style={styles.leftswip}
+  //       // onPress={() => DeleteEmployesList(item)}
+  //     >
+  //       <Image source={IconPath.delete} style={{width: 20, height: 20}} />
+  //     </TouchableOpacity>
+  //   );
+  // };
+
+  // const RightSwipe = () => {
+  //   return (
+  //     <TouchableOpacity style={styles.leftswip}>
+  //       <Image source={IconPath.edit} style={{width: 20, height: 20}} />
+  //     </TouchableOpacity>
+  //   );
+  // };
+
+  const DeleteEmployesList = async item => {
+    let data = {
+      method: 'DELETE',
+      headers: {'Content-Type': 'application/json'},
+    };
+
+    try {
+      let ResultsApi = await fetch(
+        `https://light-pumps-seal.cyclic.app/DreamCoder/api/Employe/${item._id}`,
+        data,
+      );
+
+      let res = await ResultsApi.json();
+      let resData = await res;
+
+      if (resData) {
+        SimpleToast.show(
+          `Delete Employe ${item.Employname} Data ${item._id}`,
+          SimpleToast.SHORT,
+        );
+        GetEmploy();
+      }
+
+      console.log('=====resData============>', resData);
+    } catch (err) {
+      alert(err);
+    }
   };
 
   const renderItem = ({item}) => {
     return (
-      <Swipeable renderLeftActions={LeftSwipe} renderRightActions={RightSwipe}>
+      // <Swipeable renderLeftActions={LeftSwipe} renderRightActions={RightSwipe}>
         <Clickable
           style={styles.FlatMainContainer}
           onPress={() =>
@@ -62,8 +100,13 @@ const EmployesList = ({navigation}) => {
           <Paragraph color={Colors.white} style={{paddingLeft: 10}}>
             Name: {item.Employname}
           </Paragraph>
+          <TouchableOpacity
+            style={{width: 20, height: 20}}
+            onPress={() => DeleteEmployesList(item)}>
+            <Image source={IconPath.cross} style={{width: 20, height: 20}} />
+          </TouchableOpacity>
         </Clickable>
-      </Swipeable>
+  
     );
   };
   return (
@@ -130,12 +173,12 @@ const styles = StyleSheet.create({
   leftswip: {
     width: '15%',
     height: 50,
-     borderWidth:1,
+    //  borderWidth:1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.white,
     marginVertical: 10,
     borderRadius: 10,
-    marginHorizontal:15
+    marginHorizontal: 15,
   },
 });

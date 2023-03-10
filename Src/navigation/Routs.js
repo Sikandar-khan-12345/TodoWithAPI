@@ -11,6 +11,9 @@ import StudentsList from '../screens/After_Login/Students/StudentsList';
 import EmployesList from '../screens/After_Login/employes/EmployesList';
 import EmployesAddList from '../screens/After_Login/employes/EmployesAddList';
 import EmployesDetails from '../screens/After_Login/employes/EmployesDetails';
+import ProductsList from '../screens/After_Login/products/ProductsList';
+import ProductsAddList from '../screens/After_Login/products/ProductsAddList';
+import ModalTest from '../screens/ModalTest';
 const Stack = createNativeStackNavigator();
 
 const Routs = () => {
@@ -22,7 +25,12 @@ const Routs = () => {
           component={ButtomTab}
           options={{headerShown: false}}
         />
-      
+        <Stack.Screen
+          name="ModalTest"
+          component={ModalTest}
+          options={{headerShown: false}}
+        />
+
         <Stack.Screen
           name="DrawerNavigation"
           component={DrawerNavigation}
@@ -60,7 +68,7 @@ const Routs = () => {
           component={EmployesList}
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="EmployesDetails"
           component={EmployesDetails}
           options={{headerShown: false}}
@@ -68,6 +76,16 @@ const Routs = () => {
         <Stack.Screen
           name="EmployesAddList"
           component={EmployesAddList}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ProductsList"
+          component={ProductsList}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ProductsAddList"
+          component={ProductsAddList}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

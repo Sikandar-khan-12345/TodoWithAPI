@@ -1,12 +1,13 @@
 import {StyleSheet, Text, View, Image, FlatList} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import ViewContainer from '../../../components/HOC/ViewContainer';
-import {IconPath} from '../../../Assets';
+import {IconPath, ImagePath} from '../../../Assets';
 import Colors from '../../../constents/Colors';
 import Clickable from '../../../components/HOC/Clickble';
 import {useIsFocused} from '@react-navigation/native';
 import Loader from '../../../components/UI/Loader';
 import Paragraph from '../../../components/UI/Paragraph';
+import SimpleToast from 'react-native-simple-toast';
 
 const StudentsList = ({navigation}) => {
   const [StudentsList, setStudentsList] = useState([]);
@@ -30,6 +31,32 @@ const StudentsList = ({navigation}) => {
       // console.log('===========>', res);
     } catch (err) {
       aler(err);
+    }
+  };
+
+  const DeleteStudentsList = async item => {
+    let data = {
+      method: 'DELETE',
+      headers: {'Content-Type': 'application/json'},
+    };
+    try {
+      let DeleteApiRresults = await fetch(
+        `https://light-pumps-seal.cyclic.app/DreamCoder/api/student/${item._id}`,
+        data,
+      );
+      let res = await DeleteApiRresults.json();
+      let resData = await res;
+
+      if (resData) {
+        SimpleToast.show(
+          `Delete Students ${item.name} Data ${item._id}`,
+          SimpleToast.SHORT,
+        );
+        getStudentsData();
+      }
+      console.log('=========ResData=======>', resData);
+    } catch (err) {
+      alert(err);
     }
   };
 
@@ -72,13 +99,15 @@ const StudentsList = ({navigation}) => {
             alignItems: 'center',
             right: 10,
           }}>
-          <View style={styles.icon}>
+          <Clickable style={styles.icon}>
             <Image source={IconPath.edit} style={{width: 20, height: 20}} />
-          </View>
+          </Clickable>
 
-          <View style={styles.icon}>
+          <Clickable
+            style={styles.icon}
+            onPress={() => DeleteStudentsList(item)}>
             <Image source={IconPath.delete} style={{width: 20, height: 20}} />
-          </View>
+          </Clickable>
         </View>
       </View>
     );
@@ -101,6 +130,19 @@ const StudentsList = ({navigation}) => {
         </View>
       </View>
       <Loader loading={loder} />
+      {StudentsList?.length == 0 ? (
+        <View style={styles.EmptyImg}>
+          <Image
+            source={ImagePath.Students}
+            style={{width: '80%', height: 200, borderRadius: 20}}
+          />
+          <Paragraph color={Colors.gray} size={20}>
+            Students List Is Empty
+          </Paragraph>
+        </View>
+      ) : (
+        ''
+      )}
       <FlatList data={StudentsList} renderItem={renderItem} />
     </ViewContainer>
   );
@@ -151,5 +193,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: Colors.white,
     elevation: 10,
+  },
+  EmptyImg: {
+    width: '100%',
+    height: 400,
+    // borderWidth: 1,
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
 });

@@ -1,29 +1,55 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {Image, StyleSheet, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import ViewContainer from '../../components/HOC/ViewContainer';
-import {ImagePath} from '../../Assets';
 import Paragraph from '../../components/UI/Paragraph';
 import Colors from '../../constents/Colors';
 import Clickable from '../../components/HOC/Clickble';
 import ScrollContainer from '../../components/HOC/ScrollContainer';
 import Swiper from 'react-native-swiper';
+import {useIsFocused} from '@react-navigation/native';
+import Loader from '../../components/UI/Loader';
 
 const Dashboard = ({navigation}) => {
+  const [ApiData, setApiData] = useState([]);
+  const [loaded, setloaded] = useState(false)
+
+  useEffect(() => {
+    GetDashboard();
+  }, [useIsFocused]);
+
+  const GetDashboard = async () => {
+    setloaded(true)
+    try {
+      let GetData = await fetch(
+        'https://light-pumps-seal.cyclic.app/DreamCoder/api/Dashbord',
+      );
+      let res = await GetData.json();
+      let resData = await res;
+      setloaded(false)
+
+      setApiData(resData);
+
+      // console.log('======resData======>',resData);
+    } catch (err) {
+      alert(err);
+    }
+  };
   return (
     <ScrollContainer>
       <ViewContainer style={styles.MainContainer}>
+        <Loader loading = {loaded}/>
         <View style={{height: 220}}>
           <Swiper style={styles.wrapper} showsButtons={false} autoplay={true}>
             <Image
-              source={ImagePath.Student1}
+              source={{uri: ApiData[0]?.image}}
               style={{height: '100%', width: '100%'}}
             />
             <Image
-              source={ImagePath.Employees1}
+              source={{uri: ApiData[1]?.image}}
               style={{height: '100%', width: '100%'}}
             />
             <Image
-              source={ImagePath.products1}
+              source={{uri: ApiData[2]?.image}}
               style={{height: '100%', width: '100%'}}
             />
           </Swiper>
@@ -34,18 +60,25 @@ const Dashboard = ({navigation}) => {
             onPress={() => navigation.navigate('Students')}>
             <View style={styles.imgContainer}>
               <Image
-                source={ImagePath.Students}
+                source={{uri: ApiData[0]?.image}}
                 style={styles.Img1}
                 resizeMode="contain"
               />
             </View>
             <View style={styles.txtcontainer}>
+              <View style={styles.Count}>
+                <Paragraph color={Colors.red} style={{fontWeight: 'bold'}}>
+                {ApiData[0]?.data.length}
+                </Paragraph>
+              </View>
+
               <Paragraph
                 color={Colors.black}
-                top={7}
+                right={20}
                 size={17}
+                textAlign = 'center'
                 style={styles.txt}>
-                STUDENTS DETAILS
+                STUDENTS {'\n'} LIST
               </Paragraph>
             </View>
           </Clickable>
@@ -54,18 +87,25 @@ const Dashboard = ({navigation}) => {
             onPress={() => navigation.navigate('Employees')}>
             <View style={styles.imgContainer}>
               <Image
-                source={ImagePath.Employees}
+                source={{uri: ApiData[1]?.image}}
                 style={styles.Img1}
                 resizeMode="contain"
               />
             </View>
             <View style={styles.txtcontainer}>
+              <View style={styles.Count}>
+                <Paragraph color={Colors.red} style={{fontWeight: 'bold'}}>
+                {ApiData[1]?.data.length}
+                </Paragraph>
+              </View>
               <Paragraph
                 color={Colors.black}
-                top={7}
+                right={20}
                 size={17}
-                style={styles.txt}>
-                EMPLOYESS DETAILS 
+                style={styles.txt}
+                textAlign = 'center'
+                >
+                EMPLOYESS {'\n'} LIST
               </Paragraph>
             </View>
           </Clickable>
@@ -74,18 +114,25 @@ const Dashboard = ({navigation}) => {
             onPress={() => navigation.navigate('Products')}>
             <View style={styles.imgContainer}>
               <Image
-                source={ImagePath.products}
+                source={{uri: ApiData[2]?.image}}
                 style={styles.Img1}
                 resizeMode="contain"
               />
             </View>
             <View style={styles.txtcontainer}>
+              <View style={styles.Count}>
+                <Paragraph color={Colors.red} style={{fontWeight: 'bold'}}>
+                  {ApiData[2]?.data.length}
+                </Paragraph>
+              </View>
+
               <Paragraph
                 color={Colors.black}
-                top={7}
+                right={20}
                 size={17}
+                textAlign = 'center'
                 style={styles.txt}>
-                PRODUCTS DETAILS
+                PRODUCTS {'\n'} LIST
               </Paragraph>
             </View>
           </Clickable>
@@ -143,5 +190,18 @@ const styles = StyleSheet.create({
   imgContainer: {
     width: 150,
     height: 120,
+  },
+  Count: {
+    borderWidth: 1,
+    width: 30,
+    height: 30,
+    alignSelf: 'flex-end',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+    borderColor: Colors.purple,
+    right: 0,
+    top: 0,
+    backgroundColor: Colors.white,
   },
 });
