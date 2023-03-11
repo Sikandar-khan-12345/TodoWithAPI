@@ -8,7 +8,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import ViewContainer from '../../../components/HOC/ViewContainer';
 import Clickable from '../../../components/HOC/Clickble';
-import {IconPath} from '../../../Assets';
+import {IconPath, ImagePath} from '../../../Assets';
 import Colors from '../../../constents/Colors';
 import {useIsFocused} from '@react-navigation/native';
 import Paragraph from '../../../components/UI/Paragraph';
@@ -41,25 +41,6 @@ const EmployesList = ({navigation}) => {
     }
   };
 
-  // const LeftSwipe = () => {
-  //   return (
-  //     <TouchableOpacity
-  //       style={styles.leftswip}
-  //       // onPress={() => DeleteEmployesList(item)}
-  //     >
-  //       <Image source={IconPath.delete} style={{width: 20, height: 20}} />
-  //     </TouchableOpacity>
-  //   );
-  // };
-
-  // const RightSwipe = () => {
-  //   return (
-  //     <TouchableOpacity style={styles.leftswip}>
-  //       <Image source={IconPath.edit} style={{width: 20, height: 20}} />
-  //     </TouchableOpacity>
-  //   );
-  // };
-
   const DeleteEmployesList = async item => {
     let data = {
       method: 'DELETE',
@@ -89,24 +70,29 @@ const EmployesList = ({navigation}) => {
     }
   };
 
+  const EditEmployesList = (item) =>{
+    navigation.navigate('EmployesAddList',{data:item})
+  }
+
   const renderItem = ({item}) => {
     return (
-      // <Swipeable renderLeftActions={LeftSwipe} renderRightActions={RightSwipe}>
-        <Clickable
-          style={styles.FlatMainContainer}
-          onPress={() =>
-            navigation.navigate('EmployesDetails', {data: {item}})
-          }>
+      <Clickable
+        style={styles.FlatMainContainer}
+        onPress={() => navigation.navigate('EmployesDetails', {data: {item}})}>
+        <View style={styles.editimgcontainer}>
           <Paragraph color={Colors.white} style={{paddingLeft: 10}}>
             Name: {item.Employname}
           </Paragraph>
-          <TouchableOpacity
-            style={{width: 20, height: 20}}
-            onPress={() => DeleteEmployesList(item)}>
-            <Image source={IconPath.cross} style={{width: 20, height: 20}} />
+          <TouchableOpacity onPress={() =>EditEmployesList(item)}>
+            <Image source={IconPath.edit} style={styles.editimg} />
           </TouchableOpacity>
-        </Clickable>
-  
+        </View>
+        <TouchableOpacity
+          style={{width: 20, height: 20}}
+          onPress={() => DeleteEmployesList(item)}>
+          <Image source={IconPath.cross} style={{width: 20, height: 20}} />
+        </TouchableOpacity>
+      </Clickable>
     );
   };
   return (
@@ -126,6 +112,19 @@ const EmployesList = ({navigation}) => {
         </View>
       </View>
       <Loader loading={loaded} />
+      {Data?.length == 0 ? (
+        <View style={styles.EmptyImg}>
+          <Image
+            source={ImagePath.Employees}
+            style={{width: '80%', height: 200, borderRadius: 20}}
+          />
+          <Paragraph color={Colors.gray} size={20}>
+            Employees List Is Empty
+          </Paragraph>
+        </View>
+      ) : (
+        ''
+      )}
       <FlatList data={Data} renderItem={renderItem} />
     </ViewContainer>
   );
@@ -180,5 +179,24 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderRadius: 10,
     marginHorizontal: 15,
+  },
+  EmptyImg: {
+    width: '100%',
+    height: 400,
+    // borderWidth: 1,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  editimg: {
+    width: 15,
+    height: 15,
+    tintColor: Colors.white,
+    marginRight: 10,
+    left: 5,
+  },
+  editimgcontainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
   },
 });

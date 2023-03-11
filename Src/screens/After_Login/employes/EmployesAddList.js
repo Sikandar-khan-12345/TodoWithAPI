@@ -1,5 +1,5 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
-import React, {useState} from 'react';
+import {StyleSheet, View, Image} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import FormContainer from '../../../components/HOC/FormContainer';
 import Input from '../../../components/UI/Input';
 import UiButton from '../../../components/UI/UiButton';
@@ -8,8 +8,9 @@ import Paragraph from '../../../components/UI/Paragraph';
 import {ImagePath} from '../../../Assets';
 import Clickable from '../../../components/HOC/Clickble';
 import Colors from '../../../constents/Colors';
+import {useIsFocused} from '@react-navigation/native';
 
-const EmployesAddList = ({navigation}) => {
+const EmployesAddList = ({navigation, route}) => {
   const [id, setid] = useState('');
   const [name, setname] = useState('');
   const [email, setemail] = useState('');
@@ -18,6 +19,24 @@ const EmployesAddList = ({navigation}) => {
   const [dob, setdob] = useState('');
   const [employment, setemployment] = useState('');
   const [error, seterror] = useState({});
+
+  const EditEmployesData = route?.params?.data;
+
+  // console.log('=======EditEmployesData====>',EditEmployesData);
+
+  useEffect(() => {
+    GetEmployesData();
+  }, [useIsFocused()]);
+
+  const GetEmployesData = () => {
+    setid(EditEmployesData.Employid);
+    setname(EditEmployesData.Employname);
+    setemail(EditEmployesData.Employemail);
+    setnumber(EditEmployesData.Employnumber);
+    setaddress(EditEmployesData.Employaddress);
+    setdob(EditEmployesData.Employdob);
+    setemployment(EditEmployesData.Employment);
+  };
 
   const EmployesDataWithValidation = async () => {
     const form = {
@@ -55,13 +74,12 @@ const EmployesAddList = ({navigation}) => {
         let res = await results.json();
         let resData = await res;
 
-        console.log('=======>',resData);
+        console.log('=======>', resData);
 
         if (resData.status == true) {
           navigation.navigate('EmployesList');
-        }
-        else{
-          alert('Not Found')
+        } else {
+          alert('Not Found');
         }
       } catch (err) {
         alert(err);
@@ -90,24 +108,29 @@ const EmployesAddList = ({navigation}) => {
           onChange={setid}
           error={error?.ID}
           style={styles.inp}
+          value={EditEmployesData && id}
+          keyboardType="number-pad"
         />
         <Input
           placeholder={'Employes Name'}
           onChange={setname}
           error={error?.Name}
           style={styles.inp}
+          value={EditEmployesData && name}
         />
         <Input
           placeholder={'Employes Email'}
           onChange={setemail}
           error={error?.Email}
           style={styles.inp}
+          value={EditEmployesData && email}
         />
         <Input
           placeholder={'Employes Number'}
           onChange={setnumber}
           error={error?.Number}
           style={styles.inp}
+          value={EditEmployesData && number}
         />
 
         <Input
@@ -115,22 +138,28 @@ const EmployesAddList = ({navigation}) => {
           onChange={setaddress}
           error={error?.Address}
           style={styles.inp}
+          value={EditEmployesData && address}
         />
         <Input
           placeholder={'Employes DOB'}
           onChange={setdob}
           error={error?.Dob}
           style={styles.inp}
+          value={EditEmployesData && dob}
         />
         <Input
           placeholder={'Employment'}
           onChange={setemployment}
           error={error?.Employment}
           style={styles.inp}
+          value={EditEmployesData && employment}
         />
       </View>
 
-      <UiButton text="Add" onPress={() => EmployesDataWithValidation()} />
+      <UiButton
+        text={EditEmployesData ? 'Edit ' : 'Add '}
+        onPress={() => EmployesDataWithValidation()}
+      />
     </FormContainer>
   );
 };

@@ -11,7 +11,7 @@ import {validators, isValidForm} from '../../../constents/Validation';
 import Dropdown from '../../../components/UI/Dropdown';
 import {useIsFocused} from '@react-navigation/native';
 
-const StudentsAddList = ({navigation}) => {
+const StudentsAddList = ({navigation, route}) => {
   const [name, setname] = useState('');
   const [email, setemail] = useState('');
   const [course, setcourse] = useState('');
@@ -27,10 +27,26 @@ const StudentsAddList = ({navigation}) => {
   const [CountryData, setCountryData] = useState([]);
   const [CountrySchool, setCountrySchool] = useState([]);
 
+  const EditData = route?.params?.data;
+
   useEffect(() => {
     GetCoures();
     GetCountry();
+    GetStudentseditData();
   }, [useIsFocused()]);
+
+  const GetStudentseditData = () => {
+    if (EditData) {
+      setname(EditData.name);
+      setemail(EditData.email);
+      setnumber(EditData.number);
+      setcourse(EditData.course)
+      setsubject(EditData.subject)
+      setgender(EditData.gender)
+      setcountry(EditData.country)
+      setscholl(EditData.scholl)
+    }
+  };
 
   const GetCoures = async () => {
     try {
@@ -61,31 +77,30 @@ const StudentsAddList = ({navigation}) => {
     }
   };
   const GetCountry = async () => {
-   try{
-    let results = await fetch(
-      'https://light-pumps-seal.cyclic.app/DreamCoder/api/Country',
-    );
-    let res = await results.json();
-    let resData = await res;
-    // console.log('==course  ==== resData==>', resData);
-    Data = resData.message;
+    try {
+      let results = await fetch(
+        'https://light-pumps-seal.cyclic.app/DreamCoder/api/Country',
+      );
+      let res = await results.json();
+      let resData = await res;
+      // console.log('==course  ==== resData==>', resData);
+      Data = resData.message;
 
-    let arr = [];
+      let arr = [];
 
-    Data.map((item, index) => {
-      let obj = {
-        label: item.CountryCode + ' ' + item.CountryName,
-        value: item.CountryCode + '*' + item._id,
-        color: 'black',
-      };
-      arr.push(obj);
-    });
-    setCountryData(arr);
-   }
-   catch(err){
-    // console.log('==============>',err);
-    alert(err)
-   }
+      Data.map((item, index) => {
+        let obj = {
+          label: item.CountryCode + ' ' + item.CountryName,
+          value: item.CountryCode + '*' + item._id,
+          color: 'black',
+        };
+        arr.push(obj);
+      });
+      setCountryData(arr);
+    } catch (err) {
+      // console.log('==============>',err);
+      alert(err);
+    }
   };
 
   const AddWithValidationData = async () => {
@@ -114,6 +129,8 @@ const StudentsAddList = ({navigation}) => {
         country: country,
       };
 
+      console.log('======BODY====>', body);
+
       let data = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -131,7 +148,7 @@ const StudentsAddList = ({navigation}) => {
         if (resdata.status == true) {
           navigation.navigate('StudentsList');
         } else {
-          alert('User Alrdy Exist');
+          alert('Please Enter Correct Details');
         }
 
         console.log('=======Data======', resdata);
@@ -180,7 +197,7 @@ const StudentsAddList = ({navigation}) => {
     // console.log('=========>',NewData);
   };
 
-  const CountryFunction = async (i) => {
+  const CountryFunction = async i => {
     if (!i) {
       // i = 'Basic Course*6402309fd1e8ae3f6acd8a88';
 
@@ -241,6 +258,7 @@ const StudentsAddList = ({navigation}) => {
           style={styles.inp}
           onChange={setname}
           error={error?.Name}
+          value={name}
         />
         <Input
           label=""
@@ -248,6 +266,7 @@ const StudentsAddList = ({navigation}) => {
           style={styles.inp}
           onChange={setemail}
           error={error?.Email}
+          value={email}
         />
         <View
           style={{
@@ -261,6 +280,7 @@ const StudentsAddList = ({navigation}) => {
             item={CourseData}
             placeholder={'Students Course'}
             onChange={e => CourseFunction(e)}
+            value = {course}
           />
         </View>
         <View
@@ -284,6 +304,7 @@ const StudentsAddList = ({navigation}) => {
           keyboardType="number-pad"
           onChange={setnumber}
           error={error?.Number}
+          value={number}
         />
 
         <View

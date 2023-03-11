@@ -11,7 +11,7 @@ import {useIsFocused} from '@react-navigation/native';
 import ViewContainer from '../../../components/HOC/ViewContainer';
 import Paragraph from '../../../components/UI/Paragraph';
 import Colors from '../../../constents/Colors';
-import {IconPath} from '../../../Assets';
+import {IconPath, ImagePath} from '../../../Assets';
 import Clickable from '../../../components/HOC/Clickble';
 import Loader from '../../../components/UI/Loader';
 import SimpleToast from 'react-native-simple-toast';
@@ -36,7 +36,7 @@ const ProductsList = ({navigation}) => {
       alert(err);
     }
   };
-  const DeleteProductsList = async (item) => {
+  const DeleteProductsList = async item => {
     let Data = {
       method: 'DELETE',
       headers: {'Content-Type': 'application/json'},
@@ -53,7 +53,7 @@ const ProductsList = ({navigation}) => {
 
       if (ResData) {
         SimpleToast.show(
-          `Delete Products ${item.title} Data ${item._id}`,
+          `Delete Products ${item.title} ID ${item._id}`,
           SimpleToast.SHORT,
         );
         GetProducts();
@@ -75,11 +75,6 @@ const ProductsList = ({navigation}) => {
           <Paragraph style={{marginVertical: 3}}>
             createdAt: {item.createdAt}
           </Paragraph>
-          <TouchableOpacity
-            style={styles.deletView}
-            onPress={() => DeleteProductsList(item)}>
-            <Image source={IconPath.delete} style={{width: 20, height: 20}} />
-          </TouchableOpacity>
         </View>
         <View style={styles.imgcontainer}>
           <Image
@@ -87,6 +82,14 @@ const ProductsList = ({navigation}) => {
             style={styles.img}
             resizeMode="contain"
           />
+          <TouchableOpacity
+            style={styles.deletView}
+            onPress={() => DeleteProductsList(item)}>
+            <Image
+              source={IconPath.delete}
+              style={{width: 20, height: 20, tintColor: Colors.red}}
+            />
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -108,6 +111,19 @@ const ProductsList = ({navigation}) => {
         </View>
       </View>
       <Loader loading={loader} />
+      {Data?.length == 0 ? (
+        <View style={styles.EmptyImg}>
+          <Image
+            source={ImagePath.products}
+            style={{width: '80%', height: 200, borderRadius: 20}}
+          />
+          <Paragraph color={Colors.gray} size={20}>
+            Products List Is Empty
+          </Paragraph>
+        </View>
+      ) : (
+        ''
+      )}
       <FlatList data={Data} renderItem={renderItem} />
     </ViewContainer>
   );
@@ -121,7 +137,6 @@ const styles = StyleSheet.create({
     height: '60%',
   },
   AddIconContainer: {
-    // borderWidth: 1,
     width: 40,
     height: 40,
     alignSelf: 'flex-end',
@@ -132,10 +147,6 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   mainContainer: {
-    // borderBottomWidth: 1,
-    // borderBottomColor: Colors.purple,
-    // borderWidth: 1,
-    // borderColor: Colors.purple,
     width: '95%',
     height: 200,
     margin: 8,
@@ -147,31 +158,33 @@ const styles = StyleSheet.create({
   },
   txtcontainer: {
     width: '55%',
-    // borderWidth: 1,
-    borderRadius: 20,
+    // borderRadius: 20,
     padding: 10,
   },
   imgcontainer: {
     width: '40%',
+    // borderWidth:1,
   },
   img: {
     width: '100%',
     height: '100%',
-    // borderWidth: 1,
-    // borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     borderBottomRightRadius: 20,
-
-    // borderRadius:20
+    borderBottomLeftRadius: 60,
   },
   deletView: {
     width: 25,
     height: 25,
-    marginTop: 10,
-    alignSelf: 'flex-end',
-    backgroundColor: '#fff',
+    bottom: 0,
+    left: -10,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
+    position: 'absolute',
+  },
+  EmptyImg: {
+    width: '100%',
+    height: 400,
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
 });

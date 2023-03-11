@@ -4,6 +4,7 @@ const Dropdown = ({
   placeholder = 'Please select',
   item = {},
   onChange = () => {},
+  value = ''
 }) => {
   // console.log("====item===>", item);
   return (
@@ -17,6 +18,7 @@ const Dropdown = ({
       }}
       onValueChange={value => onChange(value)}
       items={item}
+      value = {value}
     />
   );
 };

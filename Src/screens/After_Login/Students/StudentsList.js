@@ -60,6 +60,10 @@ const StudentsList = ({navigation}) => {
     }
   };
 
+  const EditStudentsList = (item) => {
+    navigation.navigate('StudentsAddList', {data: item});
+  };
+
   const renderItem = ({item}) => {
     return (
       <View style={styles.FlatListMainContainer}>
@@ -84,7 +88,7 @@ const StudentsList = ({navigation}) => {
             Country: {item.country}
           </Paragraph>
           <Paragraph color={Colors.white} style={{paddingVertical: 2}}>
-            Coursse: {item.coursse}
+            Coursse: {item.course}
           </Paragraph>
           <Paragraph color={Colors.white} style={{paddingVertical: 2}}>
             Gender: {item.gender}
@@ -99,7 +103,7 @@ const StudentsList = ({navigation}) => {
             alignItems: 'center',
             right: 10,
           }}>
-          <Clickable style={styles.icon}>
+          <Clickable style={styles.icon} onPress={() => EditStudentsList(item)}>
             <Image source={IconPath.edit} style={{width: 20, height: 20}} />
           </Clickable>
 

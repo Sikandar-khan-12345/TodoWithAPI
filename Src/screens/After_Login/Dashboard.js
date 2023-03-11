@@ -11,21 +11,21 @@ import Loader from '../../components/UI/Loader';
 
 const Dashboard = ({navigation}) => {
   const [ApiData, setApiData] = useState([]);
-  const [loaded, setloaded] = useState(false)
+  const [loaded, setloaded] = useState(false);
 
   useEffect(() => {
     GetDashboard();
   }, [useIsFocused]);
 
   const GetDashboard = async () => {
-    setloaded(true)
+    setloaded(true);
     try {
       let GetData = await fetch(
         'https://light-pumps-seal.cyclic.app/DreamCoder/api/Dashbord',
       );
       let res = await GetData.json();
       let resData = await res;
-      setloaded(false)
+      setloaded(false);
 
       setApiData(resData);
 
@@ -37,9 +37,9 @@ const Dashboard = ({navigation}) => {
   return (
     <ScrollContainer>
       <ViewContainer style={styles.MainContainer}>
-        <Loader loading = {loaded}/>
+        <Loader loading={loaded} />
         <View style={{height: 220}}>
-          <Swiper style={styles.wrapper} showsButtons={false} autoplay={true}>
+          <Swiper showsButtons={false} autoplay={true}>
             <Image
               source={{uri: ApiData[0]?.image}}
               style={{height: '100%', width: '100%'}}
@@ -68,7 +68,7 @@ const Dashboard = ({navigation}) => {
             <View style={styles.txtcontainer}>
               <View style={styles.Count}>
                 <Paragraph color={Colors.red} style={{fontWeight: 'bold'}}>
-                {ApiData[0]?.data.length}
+                  {ApiData[0]?.data.length}
                 </Paragraph>
               </View>
 
@@ -76,7 +76,7 @@ const Dashboard = ({navigation}) => {
                 color={Colors.black}
                 right={20}
                 size={17}
-                textAlign = 'center'
+                textAlign="center"
                 style={styles.txt}>
                 STUDENTS {'\n'} LIST
               </Paragraph>
@@ -95,7 +95,7 @@ const Dashboard = ({navigation}) => {
             <View style={styles.txtcontainer}>
               <View style={styles.Count}>
                 <Paragraph color={Colors.red} style={{fontWeight: 'bold'}}>
-                {ApiData[1]?.data.length}
+                  {ApiData[1]?.data.length}
                 </Paragraph>
               </View>
               <Paragraph
@@ -103,8 +103,7 @@ const Dashboard = ({navigation}) => {
                 right={20}
                 size={17}
                 style={styles.txt}
-                textAlign = 'center'
-                >
+                textAlign="center">
                 EMPLOYESS {'\n'} LIST
               </Paragraph>
             </View>
@@ -130,7 +129,7 @@ const Dashboard = ({navigation}) => {
                 color={Colors.black}
                 right={20}
                 size={17}
-                textAlign = 'center'
+                textAlign="center"
                 style={styles.txt}>
                 PRODUCTS {'\n'} LIST
               </Paragraph>
