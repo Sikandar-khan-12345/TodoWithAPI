@@ -4,9 +4,8 @@ const Dropdown = ({
   placeholder = 'Please select',
   item = {},
   onChange = () => {},
-  value = ''
+  // value = ''
 }) => {
-  // console.log("====item===>", item);
   return (
     <RNPickerSelect
       placeholder={{
@@ -18,7 +17,6 @@ const Dropdown = ({
       }}
       onValueChange={value => onChange(value)}
       items={item}
-      value = {value}
     />
   );
 };
