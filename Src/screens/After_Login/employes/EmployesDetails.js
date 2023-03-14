@@ -1,7 +1,6 @@
 import {StyleSheet, Text, View, Image, Share, Alert, StatusBar} from 'react-native';
 import React from 'react';
 import Paragraph from '../../../components/UI/Paragraph';
-import ViewContainer from '../../../components/HOC/ViewContainer';
 import {IconPath, ImagePath} from '../../../Assets';
 import Colors from '../../../constents/Colors';
 import ScrollContainer from '../../../components/HOC/ScrollContainer';
@@ -20,8 +19,7 @@ const EmployesDetails = ({route, navigation}) => {
     }
   };
   return (
-    <ScrollContainer>
-      <ViewContainer
+    <ScrollContainer
         style={{flex: 1, padding: 10, backgroundColor: Colors.smokWhite}}>
           <StatusBar backgroundColor={Colors.smokWhite} barStyle="dark-content" />
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -107,7 +105,6 @@ const EmployesDetails = ({route, navigation}) => {
             </Paragraph>
           </View>
         </View>
-      </ViewContainer>
     </ScrollContainer>
   );
 };

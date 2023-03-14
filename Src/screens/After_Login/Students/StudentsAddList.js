@@ -199,8 +199,6 @@ const StudentsAddList = ({navigation, route}) => {
 
   const CountryFunction = async i => {
     if (!i) {
-      // i = 'Basic Course*6402309fd1e8ae3f6acd8a88';
-
       i = '+91 INDIA*6402286daf37e295673020e2';
     } else {
       i = i;
